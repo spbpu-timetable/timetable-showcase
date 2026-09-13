@@ -73,7 +73,7 @@ p { margin: 0; }
 .hero h1 {
   font-size: clamp(30px, 5.2vw, 50px);
   line-height: 1.14;
-  max-width: 20ch;
+  max-width: 26ch;
   margin-bottom: 22px;
 }
 
