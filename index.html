@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Расписание вуза - автоматическое составление | Владимир Андреев</title>
+<meta name="description" content="Сервис автоматического составления расписания для университета: загрузка нагрузки из Excel, учёт ограничений и пожеланий преподавателей, расписание без конфликтов. Дипломный проект СПбПУ, 505 занятий на реальных данных факультета.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Сервис автоматического составления расписания для университета">
+<meta property="og:description" content="Опрос 120 студентов, интервью с составителями расписания, анализ ежегодных пожеланий преподавателей - и продукт, который строит расписание без конфликтов и выполняет более 90% пожеланий.">
+<meta property="og:image" content="assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231d4ed8'/><g fill='white'><rect x='7' y='9' width='18' height='2.6' rx='1.3'/><rect x='7' y='14.7' width='18' height='2.6' rx='1.3' opacity='.72'/><rect x='7' y='20.4' width='11' height='2.6' rx='1.3' opacity='.45'/></g></svg>">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="badge">Дипломный проект / НИР</p>
+    <h1>Сервис автоматического составления расписания для университета</h1>
+    <p class="lede">
+      Учебная нагрузка загружается из Excel, система собирает черновик, учитывает ограничения аудиторий,
+      преподавателей и групп вместе с их пожеланиями и строит расписание, в котором нет конфликтов.
+    </p>
+    <p class="author">
+      <strong>Владимир Андреев</strong> - автор и руководитель проекта, СПбПУ, 2025-2026
+    </p>
+    <ul class="hero-stats">
+      <li><b>505</b><span>занятий</span></li>
+      <li><b>101</b><span>преподаватель</span></li>
+      <li><b>38</b><span>групп</span></li>
+      <li><b>29</b><span>аудиторий</span></li>
+    </ul>
+    <p class="hero-note">Масштаб реальных данных факультета, на которых проверялась система</p>
+  </div>
+</header>
+
+<main>
+
+<section class="section" id="problem">
+  <div class="wrap">
+    <p class="kicker">Проблема</p>
+    <h2>Расписание собирают вручную, и цена ошибки ложится на всех сразу</h2>
+    <p class="text-lead">
+      Методист распределяет сотни занятий по неделе, удерживая в голове занятость преподавателей, групп и
+      аудиторий. Пожелания преподавателей противоречат друг другу, и проверить, сколько из них удалось
+      выполнить, вручную практически невозможно. Результат - долгий цикл подготовки, ошибки и расписание,
+      к качеству которого невозможно предъявить измеримые требования.
+    </p>
+
+    <h3 class="sub">Почему не подошли существующие продукты</h3>
+    <div class="cards cards-4">
+      <div class="card">
+        <h4>FET</h4>
+        <p>Не поддерживает чётные и нечётные недели - базовое требование российского учебного цикла.</p>
+      </div>
+      <div class="card">
+        <h4>UniTime</h4>
+        <p>Рассчитана на американскую модель, где студент сам записывается на курсы, а не учится в группе.</p>
+      </div>
+      <div class="card">
+        <h4>1С:Расписание</h4>
+        <p>Закрытая логика расчёта и высокий порог внедрения: под требования конкретного факультета не настраивается.</p>
+      </div>
+      <div class="card">
+        <h4>Галактика РУЗ</h4>
+        <p>То же ограничение: продукт корпоративного масштаба, правила которого нельзя переопределить под кафедру.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="solution">
+  <div class="wrap">
+    <p class="kicker">Как устроено решение</p>
+    <h2>Три стратегии считаются параллельно, лучший результат выбирается автоматически</h2>
+    <p class="text-lead">
+      Пользователь не выбирает алгоритм и не настраивает параметры поиска. Он задаёт ограничения и
+      пожелания, а система сама пробует три разных подхода к раскладке и отдаёт тот результат, который
+      оказался лучше по числу нарушений и выполненных пожеланий.
+    </p>
+
+    <div class="flow" role="img" aria-label="Схема генерации: данные из Excel, проверка выполнимости, три параллельные стратегии, выбор лучшего варианта, готовое расписание">
+      <div class="flow-step">
+        <span class="flow-num">1</span>
+        <b>Данные из Excel</b>
+        <p>Нагрузка, аудитории, пожелания преподавателей</p>
+      </div>
+      <div class="flow-arrow" aria-hidden="true"></div>
+      <div class="flow-step">
+        <span class="flow-num">2</span>
+        <b>Проверка выполнимости</b>
+        <p>Противоречия в условиях находятся до запуска расчёта</p>
+      </div>
+      <div class="flow-arrow" aria-hidden="true"></div>
+      <div class="flow-parallel">
+        <span class="flow-num">3</span>
+        <b>Три стратегии параллельно</b>
+        <ul>
+          <li>Оптимизирующая - минимум окон и разрывов</li>
+          <li>По пожеланиям - приоритет у преподавателей</li>
+          <li>Смешанная - проверяет неочевидные варианты</li>
+        </ul>
+      </div>
+      <div class="flow-arrow" aria-hidden="true"></div>
+      <div class="flow-step">
+        <span class="flow-num">4</span>
+        <b>Выбор лучшего</b>
+        <p>Сначала отсутствие нарушений, затем качество по пожеланиям</p>
+      </div>
+      <div class="flow-arrow" aria-hidden="true"></div>
+      <div class="flow-step flow-final">
+        <span class="flow-num">5</span>
+        <b>Готовое расписание</b>
+        <p>С отчётом: что выполнено, что нет и почему</p>
+      </div>
+    </div>
+
+    <p class="stack"><span>Стек:</span> FastAPI · Angular · PostgreSQL · Redis · Keycloak · Docker</p>
+  </div>
+</section>
+
+<section class="section" id="product">
+  <div class="wrap">
+    <p class="kicker">Как это выглядит</p>
+    <h2>Путь от выгрузки нагрузки до готового расписания</h2>
+    <p class="text-lead">Нажмите на любой экран, чтобы рассмотреть детали.</p>
+
+    <div class="gallery">
+      <figure class="shot" data-full="assets/draft-overview.webp">
+        <img src="assets/draft-overview-thumb.webp" width="900" height="478" loading="lazy" alt="Экран черновика расписания: список предметов с частотой занятий, параметры генерации и предупреждения о противоречиях">
+        <figcaption><b>Черновик и состав расписания.</b> Предметы, частота занятий и параметры запуска. Система сразу показывает, что нужно проверить - например, три занятия, жёстко поставленные на одну и ту же пару.</figcaption>
+      </figure>
+      <figure class="shot" data-full="assets/draft-teachers.webp">
+        <img src="assets/draft-teachers-thumb.webp" width="900" height="477" loading="lazy" alt="Карточки преподавателей с сетками запрещённого и предпочтительного времени">
+        <figcaption><b>Пожелания преподавателей.</b> Запрещённое время, предпочтительное время и режим нагрузки - ровно те поля, которые факультет и так собирает каждый год, только в машиночитаемом виде.</figcaption>
+      </figure>
+      <figure class="shot" data-full="assets/draft-lesson.webp">
+        <img src="assets/draft-lesson-thumb.webp" width="900" height="479" loading="lazy" alt="Карточка занятия с выбором преподавателя, группы, дня, пары, аудитории и предпочтительных корпусов">
+        <figcaption><b>Ограничения на уровне занятия.</b> Фиксированные день и время, предпочтительные аудитории и корпуса, запрещённые дни, работа с подгруппами и парными занятиями.</figcaption>
+      </figure>
+      <figure class="shot" data-full="assets/draft-rooms-groups.webp">
+        <img src="assets/draft-rooms-groups-thumb.webp" width="900" height="478" loading="lazy" alt="Экран аудиторий и групп: сетка запрещённого времени для аудитории и таблица групп">
+        <figcaption><b>Аудитории и группы.</b> Для каждой аудитории - время, когда она недоступна. Для каждой группы - размер, уровень и набор временных слотов, по которому она учится.</figcaption>
+      </figure>
+      <figure class="shot" data-full="assets/slot-groups.webp">
+        <img src="assets/slot-groups-thumb.webp" width="900" height="476" loading="lazy" alt="Настройка группы временных слотов для вечернего отделения с переопределением по субботам">
+        <figcaption><b>Разные формы обучения.</b> Вечернее отделение живёт по своим парам, а по субботам переключается на дневную сетку. Такие исключения задаются без участия разработчика.</figcaption>
+      </figure>
+      <figure class="shot" data-full="assets/schedule-result.webp">
+        <img src="assets/schedule-result-thumb.webp" width="900" height="477" loading="lazy" alt="Готовое расписание с отчётом: жёстких нарушений нет, выполнено 57 пожеланий из 62">
+        <figcaption><b>Результат с отчётом.</b> Жёстких нарушений нет, выполнено 57 пожеланий из 62. Каждое невыполненное пожелание показано списком: что ожидалось и что получилось.</figcaption>
+      </figure>
+      <figure class="shot" data-full="assets/schedule-edit.webp">
+        <img src="assets/schedule-edit-thumb.webp" width="900" height="478" loading="lazy" alt="Режим ручного редактирования занятия в готовом расписании">
+        <figcaption><b>Последнее слово за человеком.</b> День, пара, преподаватель, аудитория и формат занятия правятся прямо в готовом расписании - автоматика не запирает пользователя в своём решении.</figcaption>
+      </figure>
+    </div>
+
+    <h3 class="sub">Из чего собрана система</h3>
+    <div class="arch" role="img" aria-label="Архитектура: пользователь работает с веб-интерфейсом, запросы идут в API, длительная генерация уходит в очередь задач и обрабатывается планировщиком; отдельно - вход через Keycloak, база данных и смежный сервис импорта из РУЗ СПбПУ">
+      <div class="arch-row">
+        <div class="arch-node arch-user">Пользователь<small>методист, диспетчер</small></div>
+        <div class="arch-link" aria-hidden="true"></div>
+        <div class="arch-node">Веб-интерфейс<small>Angular</small></div>
+        <div class="arch-link" aria-hidden="true"></div>
+        <div class="arch-node">API<small>FastAPI</small></div>
+      </div>
+      <div class="arch-row arch-row-sub">
+        <div class="arch-node arch-node-muted">Вход и роли<small>Keycloak, OAuth 2.0</small></div>
+        <div class="arch-node arch-node-muted">Данные<small>PostgreSQL</small></div>
+        <div class="arch-node arch-node-muted">Смежный сервис<small>импорт из РУЗ СПбПУ</small></div>
+      </div>
+      <div class="arch-row">
+        <div class="arch-node">Очередь задач<small>Redis</small></div>
+        <div class="arch-link" aria-hidden="true"></div>
+        <div class="arch-node arch-accent">Планировщик<small>расчёт расписания</small></div>
+      </div>
+      <p class="arch-note">
+        Расчёт идёт в фоне: пользователь не ждёт ответа в браузере, а следит за прогрессом и может
+        запустить несколько вариантов подряд.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="process">
+  <div class="wrap">
+    <p class="kicker">Как собирались требования</p>
+    <h2>Требования взяты у тех, кто живёт с расписанием каждый день</h2>
+
+    <div class="cards cards-3">
+      <div class="card card-num">
+        <b class="num">4</b>
+        <h4>интервью со стейкхолдерами</h4>
+        <p>Преподаватель и три действующих составителя расписания. Из разговоров стало понятно, какие ограничения нарушать нельзя никогда, а какие - предмет торга.</p>
+      </div>
+      <div class="card card-num">
+        <b class="num">120</b>
+        <h4>студентов в опросе</h4>
+        <p>Главные боли - окна между парами, ранние и поздние пары. Эти три пункта стали приоритетными мягкими ограничениями продукта.</p>
+      </div>
+      <div class="card card-num">
+        <b class="num">Все</b>
+        <h4>ежегодные пожелания преподавателей</h4>
+        <p>Факультет собирает их каждый год. Анализ этого массива заменил гипотезы реальными требованиями и задал модель данных: какие бывают пожелания и как они превращаются в ограничения.</p>
+      </div>
+    </div>
+
+    <div class="split">
+      <div>
+        <h3 class="sub">Приоритизация и объём</h3>
+        <p>
+          Требования разложены по MoSCoW: что система обязана уметь к защите, что желательно, а что
+          осознанно вынесено за рамки. Ограничения разделены на жёсткие (нарушать нельзя) и мягкие
+          (стремиться выполнить) - это разделение стало основой и модели данных, и функции оценки
+          качества расписания.
+        </p>
+      </div>
+      <div>
+        <h3 class="sub">Роли и доступ</h3>
+        <p>
+          Три роли выросли из того, как устроена работа на факультете: наблюдатель смотрит расписание,
+          редактор готовит черновики и запускает расчёт, администратор управляет доступом и видит все
+          данные системы.
+        </p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h3>Боль студентов проходит через весь продукт</h3>
+      <p>
+        Окна, ранние и поздние пары из опроса превратились в веса функции оценки: расписание с окнами
+        проигрывает расписанию без них, а пары в 08:00 ставятся только тогда, когда иначе не получается.
+        На реальных данных факультета это дало сокращение ранних пар у преподавателей на 71%.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="results">
+  <div class="wrap">
+    <p class="kicker">Результат</p>
+    <h2>Проверено на действующем расписании факультета</h2>
+    <p class="text-lead">
+      Система сравнивалась не с идеальной моделью, а с тем расписанием, по которому факультет реально
+      учился. Быстрый режим работал без дополнительных требований, тщательный - с полным набором
+      ограничений и пожеланий преподавателей.
+    </p>
+
+    <div class="metrics">
+      <div class="metric">
+        <b>&gt;90%</b>
+        <span>пожеланий преподавателей выполнено</span>
+        <small>на показанном запуске - 57 из 62</small>
+      </div>
+      <div class="metric">
+        <b>-64%</b>
+        <span>субботних занятий у групп</span>
+        <small>133 занятия против 48</small>
+      </div>
+      <div class="metric">
+        <b>-71%</b>
+        <span>ранних пар в 08:00 у преподавателей</span>
+        <small>31 занятие против 9</small>
+      </div>
+      <div class="metric">
+        <b>5-30</b>
+        <span>минут на расчёт</span>
+        <small>быстрый режим около 5 минут, тщательный около 30 - зависит от режима и мощности машины</small>
+      </div>
+    </div>
+
+    <div class="cards cards-2">
+      <div class="card card-wide">
+        <h4>Конфликтов в расписании не возникает по конструкции</h4>
+        <p>
+          Занятость преподавателя, группы и аудитории, фиксированные пары и запрещённое время - это не
+          штраф, который алгоритм старается избежать, а фильтр: недопустимые варианты расстановки просто
+          не рассматриваются. На данных факультета оба режима дали расписание без нарушений жёстких
+          ограничений, а всё, что выполнить не удалось, система показывает явным списком с причиной.
+        </p>
+      </div>
+      <div class="card card-wide">
+        <h4>Статус проекта</h4>
+        <p>
+          Эксплуатируется в инфраструктуре СПбПУ. По результатам работы вышли три публикации РИНЦ, проект
+          победил на конференции.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="scope">
+  <div class="wrap narrow">
+    <p class="kicker">Управление объёмом</p>
+    <h2>Часть работ вынесена за периметр и передана другому исполнителю</h2>
+    <p class="text-lead">
+      Импорт действующего расписания из университетской системы РУЗ, обмен файлами Excel и автоматическая
+      оценка качества расписания выделены в отдельную дипломную работу другого студента, которого я
+      консультировал. Две системы связаны единым форматом данных: это позволило не растягивать сроки
+      основного проекта и одновременно закрыть интеграционный контур.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p class="footer-title">Владимир Андреев</p>
+    <p class="footer-sub">Автор и руководитель проекта · СПбПУ · 2025-2026</p>
+    <p class="footer-contact">
+      <a class="tg" href="https://t.me/TELEGRAM_PLACEHOLDER">Написать в Telegram</a>
+    </p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox-close" type="button" aria-label="Закрыть">&times;</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+(function () {
+  var box = document.getElementById('lightbox');
+  var img = document.getElementById('lightbox-img');
+
+  function open(src, alt) {
+    img.src = src;
+    img.alt = alt;
+    box.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    box.hidden = true;
+    img.src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.shot').forEach(function (shot) {
+    shot.addEventListener('click', function () {
+      var thumb = shot.querySelector('img');
+      open(shot.dataset.full, thumb ? thumb.alt : '');
+    });
+  });
+
+  box.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !box.hidden) close();
+  });
+})();
+</script>
+
+</body>
+</html>
