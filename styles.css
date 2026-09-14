@@ -6,6 +6,7 @@
   --bg-alt: #f6f7f9;
   --bg-hero: #f2f5fb;
   --line: #e2e6ec;
+  --arrow: #1d4ed8;
   --accent: #1d4ed8;
   --accent-soft: #e8eefc;
   --radius: 12px;
@@ -274,23 +275,24 @@ p { margin: 0; }
 .flow-final { border-color: #bcd0f7; background: #f7faff; }
 
 .flow-arrow {
-  width: 1px;
-  height: 22px;
-  margin-left: 30px;
-  background: var(--line);
+  width: 3px;
+  height: 28px;
+  margin-left: 28px;
+  background: var(--arrow);
   position: relative;
 }
 
 .flow-arrow::after {
   content: "";
   position: absolute;
-  bottom: 0;
-  left: -3px;
-  width: 7px;
-  height: 7px;
-  border-right: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  transform: rotate(45deg);
+  bottom: -1px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-top: 9px solid var(--arrow);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  transform: translateX(-50%);
 }
 
 .stack {
@@ -384,23 +386,24 @@ p { margin: 0; }
 .arch-accent small { color: #3c5ea8; }
 
 .arch-link {
-  flex: 0 0 18px;
+  flex: 0 0 30px;
   align-self: center;
-  height: 1px;
-  background: var(--line);
+  height: 3px;
+  background: var(--arrow);
   position: relative;
 }
 
 .arch-link::after {
   content: "";
   position: absolute;
-  right: 0;
-  top: -3px;
-  width: 6px;
-  height: 6px;
-  border-top: 1px solid var(--line);
-  border-right: 1px solid var(--line);
-  transform: rotate(45deg);
+  right: -1px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-left: 9px solid var(--arrow);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  transform: translateY(-50%);
 }
 
 .arch-note {
